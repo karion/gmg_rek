@@ -1,0 +1,15 @@
+{
+    "makefile.configureOnOpen": false,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "server": "localhost",
+            "port": 5432,
+            "driver": "PostgreSQL",
+            "name": "docker",
+            "database": "phoenix_app",
+            "username": "postgres",
+            "password": "postgres"
+        }
+    ]
+}
