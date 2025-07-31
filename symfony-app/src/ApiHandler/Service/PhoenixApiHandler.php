@@ -5,8 +5,10 @@ declare(strict_types=1);
 namespace GMG\ApiHandler\Service;
 
 use GMG\ApiHandler\DTO\User;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Contracts\HttpClient\ResponseInterface;
 
@@ -17,6 +19,8 @@ class PhoenixApiHandler
 
     public function __construct(
         private readonly DenormalizerInterface $denormalizer,
+        private readonly NormalizerInterface $normalizer,
+        private readonly SerializerInterface $serializer,
         private readonly HttpClientInterface $client,
         private readonly string $phoenixBaseUrl,
 
@@ -102,4 +106,63 @@ class PhoenixApiHandler
         // Możesz tu rzucić wyjątkiem lub zwrócić błąd w inny sposób
         throw new \RuntimeException("Błąd podczas usuwania użytkownika: {$statusCode}");
     }
+
+    public function updateItem(int $id, User $user): bool
+    {
+        $response = $this->client->request(
+            'PUT',
+            $this->phoenixBaseUrl . sprintf(self::GET_USER, $id),
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+                'json' => $this->normalizer->normalize(
+                    ['user' => $user],
+                    JsonEncoder::FORMAT,
+                    ['groups' => ['user:write']]
+                ),
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode >= 200 && $statusCode < 300) {
+            return true;
+        }
+
+        // Możesz tu rzucić wyjątkiem lub zwrócić błąd w inny sposób
+        throw new \RuntimeException("Błąd podczas aktualizacji użytkownika: {$statusCode}");
+    }
+
+    public function createItem(User $user): User
+    {
+        $response = $this->client->request(
+            'POST',
+            $this->phoenixBaseUrl . self::LIST_USERS,
+            [
+                'headers' => [
+                    'Accept' => 'application/json',
+                ],
+                'json' => $this->serializer->serialize(
+                    $user,
+                    JsonEncoder::FORMAT,
+                    ['groups' => ['user:write']]
+                ),
+            ]
+        );
+
+        $statusCode = $response->getStatusCode();
+
+        if ($statusCode >= 200 && $statusCode < 300) {
+            $data = $response->toArray();
+            return $this->denormalizer->denormalize(
+                $data['data'],
+                User::class
+            );
+        }
+
+        // Możesz tu rzucić wyjątkiem lub zwrócić błąd w inny sposób
+        throw new \RuntimeException("Błąd podczas tworzenia użytkownika: {$statusCode}");
+    }
+    
 }
