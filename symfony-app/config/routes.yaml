@@ -1,5 +1,5 @@
 controllers:
     resource:
-        path: ../src/Controller/
-        namespace: App\Controller
+        path: ../src/App/Controller/
+        namespace: GMG\App\Controller
     type: attribute

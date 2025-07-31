@@ -1,0 +1,39 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<div class="container mt-4">
+    <h1 class="text-primary">Hello Bootstrap!</h1>
+</div>
+
+<div class="container mt-4">
+    <table class="table table-striped table-bordered table-hover align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">Firstname</th>
+                <th scope="col">Lastname</th>
+                <th scope="col">Gender</th>
+                <th scope="col">Birthdate</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for user in users %}
+                <tr>
+                    <td>{{ user.firstname }}</td>
+                    <td>{{ user.lastname }}</td>
+                    <td class="text-center">{{ user.gender == 'male' ? '&#9794;' : '&#9792;'}}</td>
+                    <td class="text-center">{{ user.birthdate|date('d/m/Y') }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="4" class="text-center text-muted">No users found.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+    
+
+
+{% endblock %}
