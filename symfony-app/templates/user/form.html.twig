@@ -1,0 +1,32 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+
+<div class="container mt-4">
+    <h1 class="text-primary">User: {{user.id}} - {{ user.firstname }} {{ user.lastname }}</h1>
+</div>
+
+<div class="container mt-4">
+    <dl class="row">
+        <dt class="col-sm-3">Id</dt>
+        <dd class="col-sm-9">{{ user.id }}</dd>
+
+        <dt class="col-sm-3">Firstname</dt>
+        <dd class="col-sm-9">{{ user.firstname }}</dd>
+
+        <dt class="col-sm-3">Lastname</dt>
+        <dd class="col-sm-9">{{ user.lastname }}</dd>
+
+        <dt class="col-sm-3">Gender</dt>
+        <dd class="col-sm-9">{{ user.gender == 'male' ? '&#9794;' : '&#9792;'}}</dd>
+
+        <dt class="col-sm-3">Birthdate</dt>
+        <dd class="col-sm-9">{{ user.birthdate|date('d/m/Y') }}</dd>
+    </dl>
+</div>
+
+<div class="container mt-4">
+    <a href="{{ path('user_list') }}" class="btn btn-primary">Back to list</a>
+   
+</div>
+
+{% endblock %}
