@@ -37,10 +37,15 @@ class PhoenixApiHandler
         $statusCode = $response->getStatusCode();
 
         if ($statusCode >= 200 && $statusCode < 300) {
-            return $this->denormalizer->denormalize(
-                $response->toArray()['data'],
-                User::class . '[]'
-            );
+
+            $data = $response->toArray();
+            return [
+                'users' => $this->denormalizer->denormalize(
+                    $data['data'],
+                    User::class . '[]'
+                ),
+                'pagination' => $data['meta'] ?? [],
+            ];
         }
 
         // Możesz tu rzucić wyjątkiem lub zwrócić błąd w inny sposób
