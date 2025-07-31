@@ -27,14 +27,31 @@
 <div class="container mt-4">
     <h2 class="text-secondary">Edit User</h2>
     {{ form_start(form) }}
+
+        <div class="d-flex align-items-center mb-2">
+            {{ form_label(form.firstname, null, {'label_attr': {'class': 'me-4 mb-0'}}) }}
+            {{ form_widget(form.firstname, {'attr': {'class': 'form-control w-auto ms-3'}}) }}
+        </div>
+        <div class="d-flex align-items-center mb-2">
+            {{ form_label(form.lastname, null, {'label_attr': {'class': 'me-4 mb-0'}}) }}
+            {{ form_widget(form.lastname, {'attr': {'class': 'form-control w-auto ms-3'}}) }}
+        </div> 
+        <div class="d-flex align-items-center mb-2">
+            {{ form_label(form.gender, null, {'label_attr': {'class': 'me-4 mb-0'}}) }}
+            {{ form_widget(form.gender, {'attr': {'class': 'form-control w-auto ms-3'}}) }}
+        </div> 
+        <div class="d-flex align-items-center mb-2">
+            {{ form_label(form.birthdate, null, {'label_attr': {'class': 'me-4 mb-0'}}) }}
+            {{ form_widget(form.birthdate, {'attr': {'class': 'form-control w-auto ms-3'}}) }}
+        </div> 
         {{ form_widget(form) }}
-        <button type="submit" class="btn btn-primary">Save</button>
+        <div>
+            
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a href="{{ path('user_list') }}" class="btn btn-secondary">Back to list</a>
+        </div>
     {{ form_end(form) }}
 </div>  
 
-<div class="container mt-4">
-    <a href="{{ path('user_list') }}" class="btn btn-primary">Back to list</a>
-   
-</div>
 
 {% endblock %}
