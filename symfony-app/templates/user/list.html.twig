@@ -43,11 +43,17 @@
                     <td class="text-center">{{ user.birthdate|date('d/m/Y') }}</td>
                     <td class="text-center">
                         <a href="{{ path('user_show', { 'id': user.id }) }}" class="btn btn-sm btn-warning">Edit</a>
-                        <a href="{{ path('user_remove', {id: user.id}) }}"
-                            class="btn btn-danger"
-                            onclick="return confirm('Are you sure you want to delete this user?');">
-                            Delete
-                        </a>
+
+                        <form action="{{ url('user_remove', { id: user.id }) }}" method="delete" class="d-inline">
+                            <input type="hidden" name="token" value="{{ csrf_token('delete-item') }}">
+                            <button
+                                class="btn btn-sm btn-danger inline-block "
+                                type="submit"
+                                onclick="return confirm('Are you sure you want to delete this user?');"
+                            >
+                                Delete
+                            </button>
+                        </form>
                     </td>
                 </tr>
             {% else %}
