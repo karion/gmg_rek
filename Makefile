@@ -92,3 +92,9 @@ s-migration-status:
 # Uruchom testy PHPUnit
 s-test:
 	docker compose exec $(PHP_CONTAINER) php bin/phpunit
+
+s-cs-fixer:
+	docker compose exec $(PHP_CONTAINER) vendor/bin/php-cs-fixer fix
+
+s-phpstan:
+	docker compose exec $(PHP_CONTAINER) vendor/bin/phpstan analyse

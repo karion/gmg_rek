@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 namespace GMG\App\Form;
 
 use GMG\ApiHandler\DTO\User;
@@ -21,12 +22,12 @@ class UserType extends AbstractType
             ->add('firstname', TextType::class, [
                 'label' => 'First Name',
                 'constraints' => [
-                new Assert\NotBlank(),
-                new Assert\Length([
-                    'max' => 50,
-                    'maxMessage' => 'First name cannot be longer than {{ limit }} characters.',
-                ]),
-            ],
+                    new Assert\NotBlank(),
+                    new Assert\Length([
+                        'max' => 50,
+                        'maxMessage' => 'First name cannot be longer than {{ limit }} characters.',
+                    ]),
+                ],
             ])
             ->add('lastname', TextType::class, [
                 'label' => 'Last Name',
@@ -42,7 +43,7 @@ class UserType extends AbstractType
                 'label' => 'Gender',
                 'choices' => [
                     '♂' => 'male',
-                    '♀' => 'female'
+                    '♀' => 'female',
                 ],
             ])
             ->add('birthdate', DateType::class, [
@@ -72,10 +73,10 @@ class UserType extends AbstractType
                     $form->get('firstname')->getData(),
                     $form->get('lastname')->getData(),
                     $form->get('gender')->getData(),
-                    \DateTimeImmutable::createFromMutable($form->get('birthdate')->getData()) ?: new \DateTimeImmutable()
+                    \DateTimeImmutable::createFromMutable($form->get('birthdate')->getData())
                 );
             },
-            "csrf_protection" => true,
+            'csrf_protection' => true,
         ]);
     }
 }

@@ -14,11 +14,12 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserUpdate extends AbstractController
 {
     public function __construct(
-        private readonly PhoenixApiHandler $phoenixApiHandler
-    ) {}
+        private readonly PhoenixApiHandler $phoenixApiHandler,
+    ) {
+    }
 
     #[Route('/users/{id}', name: 'user_update', methods: ['POST'])]
-    public function __invoke(int $id, Request $request) : Response
+    public function __invoke(int $id, Request $request): Response
     {
         $user = $this->phoenixApiHandler->getItem($id);
         if (!$user) {
@@ -32,6 +33,7 @@ class UserUpdate extends AbstractController
             $this->phoenixApiHandler->updateItem($id, $form->getData());
 
             $this->addFlash('success', 'User updated successfully.');
+
             return $this->redirectToRoute('user_show', ['id' => $id]);
         }
 

@@ -13,18 +13,19 @@ use Symfony\Component\Routing\Annotation\Route;
 class UserRemove extends AbstractController
 {
     public function __construct(
-        private readonly PhoenixApiHandler $phoenixApiHandler
-    ) {}
+        private readonly PhoenixApiHandler $phoenixApiHandler,
+    ) {
+    }
 
     #[Route('/users/{id}', name: 'user_remove', methods: ['DELETE'])]
-    public function __invoke(int $id, Request $request) : Response
+    public function __invoke(int $id, Request $request): Response
     {
         $user = $this->phoenixApiHandler->getItem($id);
         if (!$user) {
             throw $this->createNotFoundException('User not found');
         }
 
-        $submittedToken = $request->getPayload()->get('token');
+        $submittedToken = (string)$request->getPayload()->get('token');
 
         if (!$this->isCsrfTokenValid('delete-item', $submittedToken)) {
             $this->addFlash('error', 'Failed to remove user.');

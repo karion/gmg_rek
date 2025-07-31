@@ -10,7 +10,6 @@ use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
-use Symfony\Contracts\HttpClient\ResponseInterface;
 
 class PhoenixApiHandler
 {
@@ -23,14 +22,18 @@ class PhoenixApiHandler
         private readonly SerializerInterface $serializer,
         private readonly HttpClientInterface $client,
         private readonly string $phoenixBaseUrl,
+    ) {
+    }
 
-    ) {}
-
+    /**
+     * @param array<string, mixed> $query
+     * @return User[]|array
+     */
     public function getList(array $query = []): array
     {
         $response = $this->client->request(
             'GET',
-            $this->phoenixBaseUrl . self::LIST_USERS,
+            $this->phoenixBaseUrl.self::LIST_USERS,
             [
                 'headers' => [
                     'Accept' => 'application/json',
@@ -44,10 +47,11 @@ class PhoenixApiHandler
         if ($statusCode >= 200 && $statusCode < 300) {
 
             $data = $response->toArray();
+
             return [
                 'users' => $this->denormalizer->denormalize(
                     $data['data'],
-                    User::class . '[]'
+                    User::class.'[]'
                 ),
                 'pagination' => $data['meta'] ?? [],
             ];
@@ -57,11 +61,11 @@ class PhoenixApiHandler
         throw new \RuntimeException("Błąd podczas zapytania do API: {$statusCode}");
     }
 
-    public function getItem(int $id): User
+    public function getItem(int $id): ?User
     {
         $response = $this->client->request(
             'GET',
-            $this->phoenixBaseUrl . sprintf(self::GET_USER, $id),
+            $this->phoenixBaseUrl.sprintf(self::GET_USER, $id),
             [
                 'headers' => [
                     'Accept' => 'application/json',
@@ -81,6 +85,11 @@ class PhoenixApiHandler
             );
         }
 
+        if ($statusCode === 404) {
+            // Jeśli użytkownik nie został znaleziony, zwróć null
+            return null;
+        }
+
         // Możesz tu rzucić wyjątkiem lub zwrócić błąd w inny sposób
         throw new \RuntimeException("Błąd podczas zapytania do API: {$statusCode}");
     }
@@ -89,7 +98,7 @@ class PhoenixApiHandler
     {
         $response = $this->client->request(
             'DELETE',
-            $this->phoenixBaseUrl . sprintf(self::GET_USER, $id),
+            $this->phoenixBaseUrl.sprintf(self::GET_USER, $id),
             [
                 'headers' => [
                     'Accept' => 'application/json',
@@ -111,7 +120,7 @@ class PhoenixApiHandler
     {
         $response = $this->client->request(
             'PUT',
-            $this->phoenixBaseUrl . sprintf(self::GET_USER, $id),
+            $this->phoenixBaseUrl.sprintf(self::GET_USER, $id),
             [
                 'headers' => [
                     'Accept' => 'application/json',
@@ -138,7 +147,7 @@ class PhoenixApiHandler
     {
         $response = $this->client->request(
             'POST',
-            $this->phoenixBaseUrl . self::LIST_USERS,
+            $this->phoenixBaseUrl.self::LIST_USERS,
             [
                 'headers' => [
                     'Accept' => 'application/json',
@@ -155,6 +164,7 @@ class PhoenixApiHandler
 
         if ($statusCode >= 200 && $statusCode < 300) {
             $data = $response->toArray();
+
             return $this->denormalizer->denormalize(
                 $data['data'],
                 User::class
@@ -164,5 +174,4 @@ class PhoenixApiHandler
         // Możesz tu rzucić wyjątkiem lub zwrócić błąd w inny sposób
         throw new \RuntimeException("Błąd podczas tworzenia użytkownika: {$statusCode}");
     }
-    
 }
