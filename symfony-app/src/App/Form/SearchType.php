@@ -50,6 +50,23 @@ class SearchType extends AbstractType
                     'widget' => 'single_text',
                 ]
             )
+            ->add('sort', ChoiceType::class, [
+                'label' => 'Sort by',
+                'required' => false,
+                'choices' => [
+                    'ID asc' => 'id:asc',
+                    'ID desc' => 'id:desc',
+                    'First Name asc' => 'first_name:asc',
+                    'First Name desc' => 'first_name:desc',
+                    'Last Name asc' => 'last_name:asc',
+                    'Last Name desc' => 'last_name:desc',
+                    'Gender asc' => 'gender:asc',
+                    'Gender desc' => 'gender:desc',
+                    'Birthdate asc' => 'birthdate:asc',
+                    'Birthdate desc' => 'birthdate:desc',
+                ],
+                'placeholder' => '---',
+            ])
         ;
     }
 

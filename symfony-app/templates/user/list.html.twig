@@ -42,6 +42,12 @@
             {{ form_label(searchForm.birthdate_to, null, { 'label_attr': { 'class': 'me-2 mb-0' } }) }}
             {{ form_widget(searchForm.birthdate_to, { 'attr': { 'class': 'form-control' } }) }}
         </div>
+        
+        <div class="col">
+            {{ form_label(searchForm.sort, null, { 'label_attr': { 'class': 'me-2 mb-0' } }) }}
+            {{ form_widget(searchForm.sort, { 'attr': { 'class': 'form-select' } }) }}
+        </div>
+
 
         <div class="col mt-4">
             <button type="submit" class="btn btn-primary mt-2">Search</button>

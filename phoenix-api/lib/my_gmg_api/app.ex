@@ -21,15 +21,39 @@ defmodule MyGmgApi.App do
 
   def list_users(params \\ %{}) do
     User
-    |> filter_users(params)
+    |> filter_and_sort_users(params)
     |> Repo.paginate(params)
   end
 
-  defp filter_users(query, params) do
+
+  defp filter_and_sort_users(query, params) do
     query
     |> filter_by_gender(params)
     |> filter_by_birthdate(params)
     |> filter_by_search(params)
+    |> sort_by(params["sort"])
+  end
+
+  @allowed_sort_fields ~w(first_name last_name birthdate gender)a
+  defp sort_by(query, nil), do: query
+  defp sort_by(query, sort_param) do
+    [field_str | direction] = String.split(sort_param, ":")
+    dir = case List.first(direction) do
+      "desc" -> :desc
+      "asc" -> :asc
+      _ -> :asc
+    end
+
+    try do
+      field_atom = String.to_existing_atom(field_str)
+      if field_atom in @allowed_sort_fields do
+        order_by(query, [u], [{^dir, field(u, ^field_atom)}])
+      else
+        query
+      end
+    rescue
+      ArgumentError -> query
+    end
   end
 
   defp filter_by_gender(query, %{"gender" => gender}) when is_binary(gender) and gender != "" do

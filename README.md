@@ -29,7 +29,6 @@ Visit: http://localhost:8000
 
  - API documentation
  - Split the import into multiple processes
- - Sorting in symfony and api
  - change id(int) to id(uuid)
 
 # Data source
