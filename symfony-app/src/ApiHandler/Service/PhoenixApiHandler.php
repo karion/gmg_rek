@@ -29,8 +29,17 @@ class PhoenixApiHandler
      * @param array<string, mixed> $query
      * @return User[]|array
      */
-    public function getList(array $query = []): array
+    public function getList(int $page = 1, array $query = []): array
     {
+        $query['page'] = $page;
+
+        if (isset($query['birthdate_from']) && $query['birthdate_from'] !== '') {
+            $query['birthdate_from'] = $query['birthdate_from']->format('Y-m-d');
+        }
+        if (isset($query['birthdate_to']) && $query['birthdate_to'] !== '') {
+            $query['birthdate_to'] = $query['birthdate_to']->format('Y-m-d');
+        }
+            
         $response = $this->client->request(
             'GET',
             $this->phoenixBaseUrl.self::LIST_USERS,

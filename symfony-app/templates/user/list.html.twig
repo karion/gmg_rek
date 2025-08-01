@@ -20,6 +20,36 @@
         </div>
     </div>
 {% endif %}
+<div class="container mt-4">
+    {{ form_start(searchForm, { 'attr': { 'class': 'row row-cols-auto align-items-center g-2 mb-4' } }) }}
+
+        <div class="col">
+            {{ form_label(searchForm.search, null, { 'label_attr': { 'class': 'me-2 mb-0' } }) }}
+            {{ form_widget(searchForm.search, { 'attr': { 'class': 'form-control' } }) }}
+        </div>
+
+        <div class="col">
+            {{ form_label(searchForm.gender, null, { 'label_attr': { 'class': 'me-2 mb-0' } }) }}
+            {{ form_widget(searchForm.gender, { 'attr': { 'class': 'form-select' } }) }}
+        </div>
+
+        <div class="col">
+            {{ form_label(searchForm.birthdate_from, null, { 'label_attr': { 'class': 'me-2 mb-0' } }) }}
+            {{ form_widget(searchForm.birthdate_from, { 'attr': { 'class': 'form-control' } }) }}
+        </div>
+
+        <div class="col">
+            {{ form_label(searchForm.birthdate_to, null, { 'label_attr': { 'class': 'me-2 mb-0' } }) }}
+            {{ form_widget(searchForm.birthdate_to, { 'attr': { 'class': 'form-control' } }) }}
+        </div>
+
+        <div class="col mt-4">
+            <button type="submit" class="btn btn-primary mt-2">Search</button>
+        </div>
+
+    {{ form_end(searchForm) }}
+</div>
+
 
 <div class="container mt-4">
     <table class="table table-striped table-bordered table-hover align-middle">
@@ -71,7 +101,13 @@
             <ul class="pagination justify-content-center">
                 {% for page in 1..pagination.total_pages %}
                     <li class="page-item {{ page == pagination.page_number ? 'active' : '' }}">
-                        <a class="page-link" href="{{ path('user_list', { 'page': page }) }}">{{ page }}</a>
+                       {% if filters is not empty %}
+                            {% set queryParams = filters|merge({'page': page, 'search': filters}) %}
+                        {% else %}
+                             {% set queryParams = ({'page': page}) %}
+                        {% endif %}
+
+                        <a class="page-link" href="{{ path('user_list', queryParams) }}">{{ page }}</a>
                     </li>
                 {% endfor %}
             </ul>
