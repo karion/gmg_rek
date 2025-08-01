@@ -3,13 +3,13 @@ defmodule MyGmgApiWeb.UserController do
 
   alias MyGmgApi.App
   alias MyGmgApi.App.User
-  alias MyGmgApi.Repo
 
-  action_fallback MyGmgApiWeb.FallbackController
+  action_fallback(MyGmgApiWeb.FallbackController)
+
+
   def index(conn, params) do
-    users = Repo.paginate(User, params)
-
-    json(conn, MyGmgApiWeb.UserJSON.index(%{users: users, meta: metadata(users)}))
+    page = MyGmgApi.App.list_users(params)
+    json(conn, MyGmgApiWeb.UserJSON.index(%{users: page.entries, meta: metadata(page)}))
   end
 
   defp metadata(data) do

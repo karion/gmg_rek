@@ -17,9 +17,38 @@ defmodule MyGmgApi.App do
       [%User{}, ...]
 
   """
-  def list_users do
-    Repo.all(User)
+
+
+  def list_users(params \\ %{}) do
+    User
+    |> filter_users(params)
+    |> Repo.paginate(params)
   end
+
+  defp filter_users(query, params) do
+    query
+    |> filter_by_gender(params)
+    |> filter_by_birthdate(params)
+    |> filter_by_search(params)
+  end
+
+  defp filter_by_gender(query, %{"gender" => gender}) when is_binary(gender) and gender != "" do
+    where(query, [u], u.gender == ^gender)
+  end
+
+  defp filter_by_gender(query, _), do: query
+
+  defp filter_by_birthdate(query, %{"birthdate_from" => from, "birthdate_to" => to}) do
+    where(query, [u], u.birthdate >= ^from and u.birthdate <= ^to)
+  end
+
+  defp filter_by_birthdate(query, _), do: query
+
+  defp filter_by_search(query, %{"search" => term}) when is_binary(term) and term != "" do
+    where(query, [u], ilike(u.first_name, ^"%#{term}%") or ilike(u.last_name, ^"%#{term}%"))
+  end
+
+  defp filter_by_search(query, _), do: query
 
   @doc """
   Gets a single user.
