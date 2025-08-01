@@ -34,7 +34,7 @@ class UserList extends AbstractController
         }
 
         $page = $request->query->getInt('page', 1);
-        $users = $this->phoenixApiHandler->getList($page, $filters);
+        $users = $this->phoenixApiHandler->getList($page, $filters ?? []);
 
         return $this->render('user/list.html.twig', [
             'users' => $users['users'] ?? [],

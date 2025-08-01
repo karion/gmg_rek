@@ -161,8 +161,8 @@ class PhoenixApiHandler
                 'headers' => [
                     'Accept' => 'application/json',
                 ],
-                'json' => $this->serializer->serialize(
-                    $user,
+                'json' => $this->normalizer->normalize(
+                    ['user' => $user],
                     JsonEncoder::FORMAT,
                     ['groups' => ['user:write']]
                 ),

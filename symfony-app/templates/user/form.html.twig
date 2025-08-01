@@ -1,6 +1,28 @@
 {% extends 'base.html.twig' %}
 {% block body %}
 
+{% if app.session.flashBag.has('success') %}
+    <div class="container mt-4">
+        <div class="alert alert-success">
+            {{ app.session.flashBag.get('success')[0] }}
+        </div>
+    </div>
+{% endif %}
+
+{% if app.session.flashBag.has('error') %}
+    <div class="container mt-4">
+        <div class="alert alert-danger">
+            {{ app.session.flashBag.get('error')[0] }}
+        </div>
+    </div>
+{% endif %}
+
+{% if user is not defined %}
+    <div class="container mt-4">
+        <h1 class="text-primary">Create User</h1>
+    </div>
+{% else %}
+
 <div class="container mt-4">
     <h1 class="text-primary">User: {{user.id}} - {{ user.firstname }} {{ user.lastname }}</h1>
 </div>
@@ -23,9 +45,13 @@
         <dd class="col-sm-9">{{ user.birthdate|date('d/m/Y') }}</dd>
     </dl>
 </div>
+{% endif %}
 
 <div class="container mt-4">
-    <h2 class="text-secondary">Edit User</h2>
+    {% if user is defined %}
+        <h2 class="text-secondary">Edit User</h2>
+    {% endif %}
+
     {{ form_start(form) }}
 
         <div class="d-flex align-items-center mb-2">
