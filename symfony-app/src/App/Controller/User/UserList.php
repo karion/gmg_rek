@@ -28,9 +28,9 @@ class UserList extends AbstractController
         $searchForm->handleRequest($request);
 
         if ($searchForm->isSubmitted() && $searchForm->isValid()) {
-            $data = $searchForm->getData()??[];
+            $data = $searchForm->getData() ?? [];
 
-            $filters = array_filter($data, fn($value) => !is_null($value) && $value !== '');
+            $filters = array_filter($data, fn ($value) => !is_null($value) && '' !== $value);
         }
 
         $page = $request->query->getInt('page', 1);

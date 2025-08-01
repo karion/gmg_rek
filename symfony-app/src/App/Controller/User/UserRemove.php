@@ -25,7 +25,7 @@ class UserRemove extends AbstractController
             throw $this->createNotFoundException('User not found');
         }
 
-        $submittedToken = (string)$request->getPayload()->get('token');
+        $submittedToken = (string) $request->getPayload()->get('token');
 
         if (!$this->isCsrfTokenValid('delete-item', $submittedToken)) {
             $this->addFlash('error', 'Failed to remove user.');

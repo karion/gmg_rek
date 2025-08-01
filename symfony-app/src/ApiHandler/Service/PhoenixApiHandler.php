@@ -8,7 +8,6 @@ use GMG\ApiHandler\DTO\User;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\DenormalizerInterface;
 use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
-use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class PhoenixApiHandler
@@ -19,7 +18,6 @@ class PhoenixApiHandler
     public function __construct(
         private readonly DenormalizerInterface $denormalizer,
         private readonly NormalizerInterface $normalizer,
-        private readonly SerializerInterface $serializer,
         private readonly HttpClientInterface $client,
         private readonly string $phoenixBaseUrl,
     ) {
@@ -27,19 +25,20 @@ class PhoenixApiHandler
 
     /**
      * @param array<string, mixed> $query
+     *
      * @return User[]|array
      */
     public function getList(int $page = 1, array $query = []): array
     {
         $query['page'] = $page;
 
-        if (isset($query['birthdate_from']) && $query['birthdate_from'] !== '') {
+        if (isset($query['birthdate_from']) && '' !== $query['birthdate_from']) {
             $query['birthdate_from'] = $query['birthdate_from']->format('Y-m-d');
         }
-        if (isset($query['birthdate_to']) && $query['birthdate_to'] !== '') {
+        if (isset($query['birthdate_to']) && '' !== $query['birthdate_to']) {
             $query['birthdate_to'] = $query['birthdate_to']->format('Y-m-d');
         }
-            
+
         $response = $this->client->request(
             'GET',
             $this->phoenixBaseUrl.self::LIST_USERS,
@@ -94,7 +93,7 @@ class PhoenixApiHandler
             );
         }
 
-        if ($statusCode === 404) {
+        if (404 === $statusCode) {
             // Jeśli użytkownik nie został znaleziony, zwróć null
             return null;
         }

@@ -26,7 +26,7 @@ class SearchType extends AbstractType
                 'required' => false,
                 'choices' => [
                     '♂' => 'male',
-                    '♀' => 'female'
+                    '♀' => 'female',
                 ],
                 'placeholder' => '---',
             ])
@@ -37,7 +37,7 @@ class SearchType extends AbstractType
                 [
                     'label' => 'Birthdate from',
                     'required' => false,
-                    'widget' => 'single_text'
+                    'widget' => 'single_text',
                 ]
             )
 
@@ -47,7 +47,7 @@ class SearchType extends AbstractType
                 [
                     'label' => 'Birthdate to',
                     'required' => false,
-                    'widget' => 'single_text'
+                    'widget' => 'single_text',
                 ]
             )
         ;
